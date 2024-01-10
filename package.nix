@@ -1,14 +1,13 @@
 { lib
-, stdenv
+, multiStdenv
+, stdenv_32bit
 , cmake
-, pkg-config
-, glibc_multi
 }:
 
-stdenv.mkDerivation {
+#multiStdenv.mkDerivation { #works fine, too
+stdenv_32bit.mkDerivation {
   name = "cmake-nix";
   src = ./.;
-  nativeBuildInputs = [ cmake pkg-config  ];
-  buildInputs = [ glibc_multi ];
+  nativeBuildInputs = [ cmake ];
   installPhase = ''install -Dm755 $name $out/bin/$name'';
 }
