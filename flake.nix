@@ -7,7 +7,7 @@
   };
 
   outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+    flake-utils.lib.eachSystem flake-utils.lib.allSystems (system:
       let pkgs = nixpkgs.legacyPackages.${system}; in{
         packages = {
         default = pkgs.callPackage ./package.nix { };
