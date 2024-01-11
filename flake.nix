@@ -3,17 +3,15 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "risc-v"
-      ];
-      perSystem = { config, self', inputs', pkgs, system, ... }: {
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachSystem flake-utils.lib.allSystems (system:
+      let pkgs = nixpkgs.legacyPackages.${system}; in{
         packages = {
-          default = pkgs.callPackage ./package.nix { };
+        default = pkgs.callPackage ./package.nix { };
         };
-      };
-    };
+      }
+    );
 }
